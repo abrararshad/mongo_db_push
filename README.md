@@ -32,7 +32,7 @@ Example
   roles:
     - name: abrararshad.mongo_db_push
       vars:
-        mongo_db_push_data_path: '/tmp/playbook/data/wefiq'
+        mongo_db_push_data_path: '/tmp/playbook/data/db'
         mongo_db_push_user_name: admin
         mongo_db_push_user_pass: "{{ app_mongo_admin_pass }}"
 
