@@ -1,0 +1,4 @@
+mongo_db_push_remote_dump_path: '/tmp/mongo_dump'
+mongo_db_push_data_path: ''
+mongo_db_push_user_name: ''
+mongo_db_push_user_pass: ''

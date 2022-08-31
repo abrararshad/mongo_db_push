@@ -1,0 +1,42 @@
+---
+- name: Dump folder name
+  ansible.builtin.set_fact:
+    dump_folder: "{{ ansible_date_time.iso8601 }}"
+- name: Archive the files
+  archive:
+    path: "{{ mongo_db_push_data_path }}"
+    dest: "{{ mongo_db_push_data_path }}/../{{ dump_folder }}.zip"
+    format: zip
+  delegate_to: localhost
+  become: false    
+- name: Create directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - "{{ mongo_db_push_remote_dump_path }}/archive"
+    - "{{ mongo_db_push_remote_dump_path }}/db/{{ dump_folder }}"
+- name: Copy database
+  become: true 
+  copy:
+    src: "{{ mongo_db_push_data_path }}/../{{ dump_folder }}.zip"
+    dest: "{{ mongo_db_push_remote_dump_path }}/archive/{{ dump_folder }}.zip"
+    owner: root
+    group: root
+    mode: 0644   
+- name: Extract {{ dump_folder }}.zip into /tmp/mongo_data/db/{{ dump_folder }}
+  ansible.builtin.unarchive:
+    src: "{{ mongo_db_push_remote_dump_path }}/archive/{{ dump_folder }}.zip"
+    dest: "{{ mongo_db_push_remote_dump_path }}/db/{{ dump_folder }}"
+    remote_src: yes
+- name: Restore database
+  command: >
+    mongorestore
+    --host localhost
+    --port 27017
+    --username {{ mongo_db_push_user_name }}
+    --password {{ mongo_db_push_user_pass }}
+    --authenticationDatabase admin
+    {{ mongo_db_push_remote_dump_path }}/db/{{ dump_folder }}
+
