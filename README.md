@@ -1,7 +1,10 @@
-Role Name
+Anbiel Role
 =========
 
 Ansible role for pushing mongo database from the ansible controller to the remote machine
+```
+ansible-galaxy install abrararshad.mongo_db_push
+```
 
 Role Variables
 --------------
@@ -27,7 +30,7 @@ Example
 - name: 'Mongo db push'
   hosts: "all"
   roles:
-    - name: mongo_db_push
+    - name: abrararshad.mongo_db_push
       vars:
         mongo_db_push_data_path: '/tmp/playbook/data/wefiq'
         mongo_db_push_user_name: admin
