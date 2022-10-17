@@ -1,4 +1,4 @@
-Anbiel Role
+Ansible Role
 =========
 
 Ansible role for pushing mongo database from the ansible controller to the remote machine
